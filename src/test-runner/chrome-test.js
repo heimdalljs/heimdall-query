@@ -38,15 +38,13 @@ function ChromeTest(config, CACHE_DIR) {
   this.slug = config.slug;
   this.domain = config.domain || 'http://localhost:4200/';
   this.url = this.domain + config.slug;
-  this.outputPath = path.join(__dirname, '../results', CACHE_DIR, config.slug + '.json');
-  console.log('[' + this.slug + '] outputPath => ' + this.outputPath);
+  this.outputPath = path.join(CACHE_DIR, config.slug + '.json');
+  console.log(chalk.grey('\t[' + this.slug + '] outputPath => ' + this.outputPath));
   this.timeoutMessage = "Url timeout for slug '" + config.slug + "'";
   this.completionCheck = config.check || until.elementLocated(By.id('test-complete'));
   this.options = config.chromeOptions || CHROME_OPTIONS;
   this._runsWillFail = false;
   this.progress = null;
-
-  console.log('chrome options', this.options);
 
   this.builder = new webdriver.Builder()
     .forBrowser('chrome')
