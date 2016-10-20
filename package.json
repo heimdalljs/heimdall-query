@@ -1,6 +1,6 @@
 {
   "name": "heimdall-query",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Analysis Tool for Heimdall Trees",
   "repository": "git://github.com/heimdalljs/heimdall-query.git",
   "directories": {},
@@ -21,6 +21,6 @@
     "selenium-webdriver": "^3.0.0-beta-2"
   },
   "peerDependencies": {
-    "heimdalljs": "~0.3.0-alpha1"
+    "heimdalljs": "~0.3.0"
   }
 }
