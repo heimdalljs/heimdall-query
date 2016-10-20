@@ -11,25 +11,25 @@ const ProgressBar = require('progress');
 
 CHROME_OPTIONS.addArguments(
 
-    'v8-cache-options=none',
-    'v8-cache-strategies-for-cache-storage=none',
-    "disable-background-networking",
-    // "0",
-    "bwsi",
-    "disable-gpu-program-cache",
-    // "silent-launch",
-    // "enable-net-benchmarking",
-    // "metrics-recording-only",
-    "no-default-browser-check",
-    "no-first-run",
-    // "--enable-gpu-benchmarking",
-    "disable-cache",
-    "no-proxy-server",
-    "disable-component-extensions-with-background-pages",
-    "disable-default-apps",
-    "ignore-certificate-errors"
-    //  first available ephemeral port
-    // "--remote-debugging-port=0"
+  'v8-cache-options=none',
+  'v8-cache-strategies-for-cache-storage=none',
+  "disable-background-networking",
+  // "0",
+  "bwsi",
+  "disable-gpu-program-cache",
+  // "silent-launch",
+  // "enable-net-benchmarking",
+  // "metrics-recording-only",
+  "no-default-browser-check",
+  "no-first-run",
+  // "--enable-gpu-benchmarking",
+  "disable-cache",
+  "no-proxy-server",
+  "disable-component-extensions-with-background-pages",
+  "disable-default-apps",
+  "ignore-certificate-errors"
+  //  first available ephemeral port
+  // "--remote-debugging-port=0"
 
 );
 
@@ -60,6 +60,7 @@ ChromeTest.prototype.run = function runTests() {
   console.log(chalk.cyan('GET ' ) + chalk.grey(Test.url));
 
   Test.progress = new ProgressBar(' running scenario [:bar] :percent :etas', { total: Test.runs, clear: true });
+  Test.driver = Test.builder.build();
 
   return runs
     .reduce(function(chain) {
@@ -79,6 +80,12 @@ ChromeTest.prototype.run = function runTests() {
       fs.writeFileSync(Test.outputPath, jsonDataStr);
 
       return jsonDataStr;
+    })
+    .then(function(result) {
+      return Test.driver.quit()
+        .then(function() {
+          return result;
+        });
     });
 };
 
@@ -99,19 +106,16 @@ ChromeTest.prototype.runOnce = function runTest() {
       reject(new Error(Test.timeoutMessage));
     }, REQUEST_TIMEOUT);
 
-    Test.driver = Test.builder.build();
     Test.driver.get(Test.url);
     Test.driver.wait(Test.completionCheck);
 
     Test.driver.executeScript('return window.result;')
       .then(function(jsonDataStr) {
         clearTimeout(timeout);
-        return Test.driver.quit()
-          .then(() => { resolve(jsonDataStr); });
+        resolve(jsonDataStr);
       }, function(e) {
         clearTimeout(timeout);
-        return Test.driver.quit()
-          .then(() => { throw e; });
+        throw e;
       });
   });
 };

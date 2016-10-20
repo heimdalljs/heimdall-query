@@ -1,4 +1,4 @@
-const ChromeTest = require('./chrome-test');
+const ChromeTest = require('./chrome-batch-test');
 
 function TestRunner(options, CACHE_DIR) {
   this.options = options;

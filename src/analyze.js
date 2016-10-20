@@ -39,7 +39,8 @@ module.exports = function analyzeData(config, cachePath) {
         analyzeRuns(config.slugs[i], JSON.parse(results[i]), config);
       }
 
-    }, function(e) {
+    })
+    .catch(function(e) {
       console.log('\n\n', e, '\n\n');
     });
 };
