@@ -16,12 +16,9 @@ function fixForPlot(n) {
   return n.toFixed(2);
 }
 
-Object.defineProperty(Stat.prototype, 'stats', {
-  get: function() {
-    if (typeof this.value !== 'number') {
-      return {};
-    }
 
+Object.defineProperty(Stat.prototype, 'filteredRange', {
+  get: function() {
     var r = this.range;
 
     // console.log('range', JSON.stringify(r, null, 2));
@@ -37,7 +34,17 @@ Object.defineProperty(Stat.prototype, 'stats', {
       return 0;
     });
 
-    var filtered = r.filter(outliers());
+    return r.filter(outliers());
+  }
+});
+
+Object.defineProperty(Stat.prototype, 'stats', {
+  get: function() {
+    if (typeof this.value !== 'number') {
+      return {};
+    }
+
+    var filtered = this.filteredRange;
 
     var len = filtered.length;
     var q1i = Math.round(len / 4);
@@ -77,8 +84,11 @@ Stat.prototype.toString = function toString() {
 };
 
 Stat.prototype.valueOf = function valueOf() {
-  if (typeof this.value === 'number') {
-    return this.value / this.range.length;
+  if (typeof this.value === 'number' && this.range) {
+    var value = this.filteredRange.reduce(function(v, c) { return v + c; }, 0);
+    var len = this.filteredRange.length;
+
+    return value / len;
   } else {
     return this.value;
   }

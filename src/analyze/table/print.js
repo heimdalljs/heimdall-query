@@ -19,6 +19,6 @@ module.exports = function printTable({
 
   rows.forEach(r => table.push(prettyTimes({ row: r, stats })));
 
-  console.log(tableName + '\t (average of ' + runCount + ' runs)');
+  console.log(tableName + '\t (average of ' + runCount + ' runs with outliers filtered)');
   console.log(table.toString());
 };
