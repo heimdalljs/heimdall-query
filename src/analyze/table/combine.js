@@ -1,4 +1,5 @@
-var ptBox = require('plain-text-box-plot');
+var boxplot = require('plain-text-box-plot');
+var outliers = require('outliers');
 
 function Stat() {
   this.value = null;
@@ -21,7 +22,7 @@ Object.defineProperty(Stat.prototype, 'stats', {
       return {};
     }
 
-    let r = this.range;
+    var r = this.range;
 
     // console.log('range', JSON.stringify(r, null, 2));
 
@@ -36,17 +37,19 @@ Object.defineProperty(Stat.prototype, 'stats', {
       return 0;
     });
 
-    let len = r.length;
-    let q1i = Math.round(len / 4);
-    let q2i = Math.round(len / 2);
-    let q3i = Math.round(len / 4 * 3);
+    var filtered = r.filter(outliers());
 
-    let stats = {
-      min: fixForPlot(Math.min.apply(Math, r)),
-      q1: fixForPlot(r[q1i]),
-      q2: fixForPlot(r[q2i]),
-      q3: fixForPlot(r[q3i]),
-      max: fixForPlot(Math.max.apply(Math, r))
+    var len = filtered.length;
+    var q1i = Math.round(len / 4);
+    var q2i = Math.round(len / 2);
+    var q3i = Math.round(len / 4 * 3);
+
+    var stats = {
+      min: fixForPlot(Math.min.apply(Math, filtered)),
+      q1: fixForPlot(filtered[q1i]),
+      q2: fixForPlot(filtered[q2i]),
+      q3: fixForPlot(filtered[q3i]),
+      max: fixForPlot(Math.max.apply(Math, filtered))
     };
 
     // console.log(stats);
@@ -61,12 +64,7 @@ Object.defineProperty(Stat.prototype, 'plot', {
       return '';
     }
 
-    let plot = ptBox(this.stats, 25);
-    // let plot = '';
-
-    // console.log(plot);
-
-    return plot;
+    return boxplot(this.stats, 25);
   }
 });
 
