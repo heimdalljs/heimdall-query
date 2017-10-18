@@ -1,12 +1,12 @@
 {
   "name": "heimdall-query",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Analysis Tool for Heimdall Trees",
   "repository": "git://github.com/heimdalljs/heimdall-query.git",
   "directories": {},
   "scripts": {},
   "engines": {
-    "node": ">= 0.10.0"
+    "node": ">= 4.0.0"
   },
   "main": "./src/index.js",
   "author": "",
