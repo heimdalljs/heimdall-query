@@ -1,5 +1,5 @@
 require('./node');
-var Tree = require('heimdalljs').constructor.Tree;
+var Tree = require('heimdalljs')._Tree;
 
 module.exports = function toTree(data) {
   let tree = Tree.fromJSON(data);

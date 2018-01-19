@@ -1,4 +1,4 @@
-var Node = require('heimdalljs').constructor.Node;
+var Node = require('heimdalljs')._Node;
 
 Node.prototype.preOrderIterator = function* (ignoreBranches = []) {
   let isIgnored = ignoreBranches.indexOf(this.name) !== -1;
